@@ -1,0 +1,2627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pause | Mindful Delay</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⏸️</text></svg>">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Google+Sans:wght@400;500;700&display=swap">
+    <style>
+        /* ===== CSS RESET & BASE ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            /* Light Theme (Default) */
+            --color-primary: #1a73e8;
+            --color-primary-dark: #0d47a1;
+            --color-surface: #ffffff;
+            --color-background: #f8f9fa;
+            --color-text-primary: #202124;
+            --color-text-secondary: #5f6368;
+            --color-text-tertiary: #80868b;
+            --color-border: #dadce0;
+            --color-shadow: rgba(60, 64, 67, 0.1);
+            --color-success: #0d904f;
+            --color-warning: #f29900;
+            --color-error: #d93025;
+            --color-card: #ffffff;
+            --gradient-primary: linear-gradient(135deg, #1a73e8, #0d47a1);
+            
+            /* Animation Timings */
+            --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-medium: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
+            
+            /* Layout */
+            --border-radius-sm: 8px;
+            --border-radius-md: 12px;
+            --border-radius-lg: 20px;
+            --border-radius-xl: 28px;
+            --spacing-xs: 4px;
+            --spacing-sm: 8px;
+            --spacing-md: 16px;
+            --spacing-lg: 24px;
+            --spacing-xl: 32px;
+            --spacing-xxl: 48px;
+            
+            /* Typography */
+            --font-family-primary: 'Google Sans', 'Roboto', sans-serif;
+            --font-family-secondary: 'Roboto', sans-serif;
+            --font-size-xs: 0.75rem;
+            --font-size-sm: 0.875rem;
+            --font-size-base: 1rem;
+            --font-size-lg: 1.125rem;
+            --font-size-xl: 1.25rem;
+            --font-size-xxl: 1.5rem;
+            --font-size-xxxl: 2rem;
+            --line-height-tight: 1.3;
+            --line-height-normal: 1.5;
+            --line-height-relaxed: 1.7;
+            
+            /* Elevation */
+            --elevation-1: 0 1px 2px rgba(0, 0, 0, 0.05);
+            --elevation-2: 0 2px 6px rgba(0, 0, 0, 0.08);
+            --elevation-3: 0 4px 12px rgba(0, 0, 0, 0.12);
+            --elevation-4: 0 8px 24px rgba(0, 0, 0, 0.16);
+        }
+
+        /* ===== THEME DEFINITIONS ===== */
+        .theme-dark {
+            --color-primary: #8ab4f8;
+            --color-primary-dark: #669df6;
+            --color-surface: #202124;
+            --color-background: #121212;
+            --color-text-primary: #e8eaed;
+            --color-text-secondary: #9aa0a6;
+            --color-text-tertiary: #80868b;
+            --color-border: #3c4043;
+            --color-shadow: rgba(0, 0, 0, 0.3);
+            --color-card: #2d2e30;
+            --gradient-primary: linear-gradient(135deg, #8ab4f8, #669df6);
+        }
+
+        .theme-midnight-blue {
+            --color-primary: #5e97f6;
+            --color-primary-dark: #4285f4;
+            --color-surface: #0f1a2a;
+            --color-background: #0a1422;
+            --color-text-primary: #e3eaf9;
+            --color-text-secondary: #94a3c2;
+            --color-text-tertiary: #6b7b9c;
+            --color-border: #1e2b44;
+            --color-shadow: rgba(0, 0, 0, 0.4);
+            --color-card: #16213e;
+            --gradient-primary: linear-gradient(135deg, #0ea5e9, #3b82f6);
+        }
+
+        .theme-emerald-green {
+            --color-primary: #10b981;
+            --color-primary-dark: #059669;
+            --color-surface: #f0fdf4;
+            --color-background: #ecfdf5;
+            --color-text-primary: #064e3b;
+            --color-text-secondary: #047857;
+            --color-text-tertiary: #10b981;
+            --color-border: #a7f3d0;
+            --color-shadow: rgba(16, 185, 129, 0.1);
+            --color-card: #ffffff;
+            --gradient-primary: linear-gradient(135deg, #10b981, #059669);
+        }
+
+        .theme-sunset-gradient {
+            --color-primary: #f59e0b;
+            --color-primary-dark: #d97706;
+            --color-surface: #fff7ed;
+            --color-background: linear-gradient(135deg, #fef3c7, #fed7aa, #fecaca);
+            --color-text-primary: #7c2d12;
+            --color-text-secondary: #9a3412;
+            --color-text-tertiary: #ea580c;
+            --color-border: #fdba74;
+            --color-shadow: rgba(245, 158, 11, 0.15);
+            --color-card: rgba(255, 255, 255, 0.9);
+            --gradient-primary: linear-gradient(135deg, #f59e0b, #dc2626);
+        }
+
+        .theme-minimal-gray {
+            --color-primary: #6b7280;
+            --color-primary-dark: #4b5563;
+            --color-surface: #ffffff;
+            --color-background: #f9fafb;
+            --color-text-primary: #111827;
+            --color-text-secondary: #6b7280;
+            --color-text-tertiary: #9ca3af;
+            --color-border: #e5e7eb;
+            --color-shadow: rgba(0, 0, 0, 0.05);
+            --color-card: #ffffff;
+            --gradient-primary: linear-gradient(135deg, #6b7280, #4b5563);
+        }
+
+        .theme-custom-accent {
+            --color-primary: #8b5cf6;
+            --color-primary-dark: #7c3aed;
+            --color-surface: #faf5ff;
+            --color-background: #f5f3ff;
+            --color-text-primary: #4c1d95;
+            --color-text-secondary: #7c3aed;
+            --color-text-tertiary: #8b5cf6;
+            --color-border: #ddd6fe;
+            --color-shadow: rgba(139, 92, 246, 0.1);
+            --color-card: #ffffff;
+            --gradient-primary: linear-gradient(135deg, #8b5cf6, #7c3aed);
+        }
+
+        .theme-oled-dark {
+            --color-primary: #00e676;
+            --color-primary-dark: #00c853;
+            --color-surface: #000000;
+            --color-background: #000000;
+            --color-text-primary: #ffffff;
+            --color-text-secondary: #b0b0b0;
+            --color-text-tertiary: #808080;
+            --color-border: #333333;
+            --color-shadow: rgba(0, 0, 0, 0.8);
+            --color-card: #111111;
+            --gradient-primary: linear-gradient(135deg, #00e676, #00c853);
+        }
+
+        /* ===== BASE STYLES ===== */
+        body {
+            font-family: var(--font-family-secondary);
+            background: var(--color-background);
+            color: var(--color-text-primary);
+            transition: background-color var(--transition-medium), color var(--transition-medium);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .app-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--spacing-md);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ===== TYPOGRAPHY ===== */
+        h1, h2, h3, h4 {
+            font-family: var(--font-family-primary);
+            font-weight: 500;
+            line-height: var(--line-height-tight);
+        }
+
+        h1 {
+            font-size: var(--font-size-xxxl);
+            margin-bottom: var(--spacing-md);
+        }
+
+        h2 {
+            font-size: var(--font-size-xxl);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        h3 {
+            font-size: var(--font-size-xl);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .text-body {
+            font-size: var(--font-size-base);
+            line-height: var(--line-height-normal);
+            color: var(--color-text-secondary);
+        }
+
+        .text-caption {
+            font-size: var(--font-size-sm);
+            color: var(--color-text-tertiary);
+            line-height: var(--line-height-tight);
+        }
+
+        .text-overline {
+            font-size: var(--font-size-xs);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--color-text-tertiary);
+            font-weight: 500;
+        }
+
+        /* ===== COMPONENTS ===== */
+        .card {
+            background: var(--color-card);
+            border-radius: var(--border-radius-lg);
+            padding: var(--spacing-lg);
+            box-shadow: var(--elevation-2);
+            border: 1px solid var(--color-border);
+            transition: all var(--transition-medium);
+        }
+
+        .card:hover {
+            box-shadow: var(--elevation-3);
+        }
+
+        .btn {
+            padding: var(--spacing-sm) var(--spacing-lg);
+            border-radius: var(--border-radius-md);
+            border: none;
+            font-family: var(--font-family-primary);
+            font-weight: 500;
+            font-size: var(--font-size-base);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-sm);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s;
+        }
+
+        .btn:active::after {
+            width: 200px;
+            height: 200px;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--elevation-3);
+        }
+
+        .btn-secondary {
+            background: var(--color-surface);
+            color: var(--color-text-primary);
+            border: 2px solid var(--color-border);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--color-primary);
+            background: var(--color-surface);
+        }
+
+        .btn-tertiary {
+            background: transparent;
+            color: var(--color-text-secondary);
+            padding: var(--spacing-xs) var(--spacing-md);
+        }
+
+        .btn-tertiary:hover {
+            background: rgba(0, 0, 0, 0.05);
+            color: var(--color-text-primary);
+        }
+
+        .fab {
+            position: fixed;
+            bottom: var(--spacing-xl);
+            right: var(--spacing-xl);
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--font-size-xl);
+            box-shadow: var(--elevation-4);
+            transition: all var(--transition-medium);
+            z-index: 100;
+        }
+
+        .fab:hover {
+            transform: scale(1.1) rotate(15deg);
+            box-shadow: var(--elevation-4), 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        .fab:active {
+            transform: scale(0.95);
+        }
+
+        .slider {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: var(--color-border);
+            outline: none;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            cursor: pointer;
+            border: 3px solid var(--color-surface);
+            box-shadow: var(--elevation-2);
+            transition: all var(--transition-fast);
+        }
+
+        .slider::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+            box-shadow: var(--elevation-3);
+        }
+
+        .slider::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            cursor: pointer;
+            border: 3px solid var(--color-surface);
+            box-shadow: var(--elevation-2);
+        }
+
+        .textarea {
+            width: 100%;
+            min-height: 200px;
+            padding: var(--spacing-md);
+            border-radius: var(--border-radius-md);
+            border: 2px solid var(--color-border);
+            background: var(--color-surface);
+            color: var(--color-text-primary);
+            font-family: var(--font-family-secondary);
+            font-size: var(--font-size-base);
+            line-height: var(--line-height-relaxed);
+            resize: vertical;
+            transition: border-color var(--transition-fast);
+        }
+
+        .textarea:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.1);
+        }
+
+        .textarea::placeholder {
+            color: var(--color-text-tertiary);
+        }
+
+        .select {
+            padding: var(--spacing-sm) var(--spacing-md);
+            border-radius: var(--border-radius-md);
+            border: 2px solid var(--color-border);
+            background: var(--color-surface);
+            color: var(--color-text-primary);
+            font-family: var(--font-family-secondary);
+            font-size: var(--font-size-base);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            width: 100%;
+        }
+
+        .select:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.1);
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 52px;
+            height: 28px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider-toggle {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--color-border);
+            transition: var(--transition-medium);
+            border-radius: 34px;
+        }
+
+        .slider-toggle:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: var(--transition-medium);
+            border-radius: 50%;
+        }
+
+        input:checked + .slider-toggle {
+            background: var(--gradient-primary);
+        }
+
+        input:checked + .slider-toggle:before {
+            transform: translateX(24px);
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border-radius: var(--border-radius-sm);
+            font-size: var(--font-size-xs);
+            font-weight: 500;
+            background: rgba(26, 115, 232, 0.1);
+            color: var(--color-primary);
+        }
+
+        .progress-ring {
+            transform: rotate(-90deg);
+        }
+
+        .progress-ring-circle {
+            stroke: var(--color-primary);
+            stroke-linecap: round;
+            transition: stroke-dashoffset 0.35s;
+            transform: rotate(90deg);
+            transform-origin: 50% 50%;
+        }
+
+        /* ===== LAYOUT COMPONENTS ===== */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--spacing-lg) 0;
+            margin-bottom: var(--spacing-xl);
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            font-family: var(--font-family-primary);
+            font-size: var(--font-size-xxl);
+            font-weight: 700;
+            color: var(--color-text-primary);
+        }
+
+        .theme-selector {
+            display: flex;
+            gap: var(--spacing-xs);
+            flex-wrap: wrap;
+        }
+
+        .theme-color {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: transform var(--transition-fast);
+        }
+
+        .theme-color:hover {
+            transform: scale(1.2);
+        }
+
+        .theme-color.active {
+            border-color: var(--color-text-primary);
+            transform: scale(1.1);
+        }
+
+        .main-content {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--spacing-xl);
+        }
+
+        @media (min-width: 1024px) {
+            .main-content {
+                grid-template-columns: 2fr 1fr;
+            }
+        }
+
+        .section {
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .toolbar {
+            display: flex;
+            gap: var(--spacing-sm);
+            margin-bottom: var(--spacing-lg);
+            flex-wrap: wrap;
+        }
+
+        .preset-buttons {
+            display: flex;
+            gap: var(--spacing-sm);
+            flex-wrap: wrap;
+        }
+
+        .sentiment-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border-radius: var(--border-radius-md);
+            background: rgba(26, 115, 232, 0.1);
+            color: var(--color-primary);
+            font-size: var(--font-size-sm);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .delay-display {
+            text-align: center;
+            font-size: var(--font-size-xl);
+            font-weight: 500;
+            margin: var(--spacing-lg) 0;
+            padding: var(--spacing-md);
+            background: var(--color-surface);
+            border-radius: var(--border-radius-lg);
+            border: 2px solid var(--color-border);
+        }
+
+        .animation-container {
+            width: 100%;
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            border-radius: var(--border-radius-lg);
+            background: var(--color-background);
+            margin: var(--spacing-lg) 0;
+        }
+
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            opacity: 0.6;
+        }
+
+        .recovery-view {
+            display: none;
+            animation: fadeIn var(--transition-medium);
+        }
+
+        .decision-buttons {
+            display: flex;
+            gap: var(--spacing-md);
+            margin-top: var(--spacing-xl);
+            flex-wrap: wrap;
+        }
+
+        .stat-card {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            padding: var(--spacing-md);
+            background: var(--color-surface);
+            border-radius: var(--border-radius-md);
+            border: 1px solid var(--color-border);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .stat-icon {
+            font-size: var(--font-size-xl);
+        }
+
+        .stat-content {
+            flex: 1;
+        }
+
+        .stat-value {
+            font-size: var(--font-size-lg);
+            font-weight: 700;
+            color: var(--color-text-primary);
+        }
+
+        .stat-label {
+            font-size: var(--font-size-sm);
+            color: var(--color-text-secondary);
+        }
+
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--spacing-md) 0;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .setting-item:last-child {
+            border-bottom: none;
+        }
+
+        .setting-label {
+            flex: 1;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn var(--transition-medium);
+        }
+
+        .modal-content {
+            background: var(--color-surface);
+            border-radius: var(--border-radius-lg);
+            padding: var(--spacing-xl);
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            animation: slideUp var(--transition-medium);
+        }
+
+        .tab-container {
+            display: flex;
+            border-bottom: 1px solid var(--color-border);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .tab {
+            padding: var(--spacing-md) var(--spacing-lg);
+            background: none;
+            border: none;
+            color: var(--color-text-secondary);
+            font-family: var(--font-family-primary);
+            font-weight: 500;
+            cursor: pointer;
+            position: relative;
+            transition: color var(--transition-fast);
+        }
+
+        .tab:hover {
+            color: var(--color-text-primary);
+        }
+
+        .tab.active {
+            color: var(--color-primary);
+        }
+
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-primary);
+            border-radius: 3px 3px 0 0;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .guide-section {
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .guide-step {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-lg);
+            padding: var(--spacing-md);
+            background: var(--color-surface);
+            border-radius: var(--border-radius-md);
+            border-left: 4px solid var(--color-primary);
+        }
+
+        .step-number {
+            width: 32px;
+            height: 32px;
+            background: var(--gradient-primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .footer {
+            text-align: center;
+            padding: var(--spacing-xl) 0;
+            margin-top: var(--spacing-xl);
+            border-top: 1px solid var(--color-border);
+            color: var(--color-text-secondary);
+        }
+
+        /* ===== ANIMATIONS ===== */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -1000px 0; }
+            100% { background-position: 1000px 0; }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        .float {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        /* ===== UTILITY CLASSES ===== */
+        .hidden {
+            display: none !important;
+        }
+
+        .visible {
+            display: block !important;
+        }
+
+        .flex-center {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .flex-between {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .mt-1 { margin-top: var(--spacing-xs); }
+        .mt-2 { margin-top: var(--spacing-sm); }
+        .mt-3 { margin-top: var(--spacing-md); }
+        .mt-4 { margin-top: var(--spacing-lg); }
+        .mt-5 { margin-top: var(--spacing-xl); }
+
+        .mb-1 { margin-bottom: var(--spacing-xs); }
+        .mb-2 { margin-bottom: var(--spacing-sm); }
+        .mb-3 { margin-bottom: var(--spacing-md); }
+        .mb-4 { margin-bottom: var(--spacing-lg); }
+        .mb-5 { margin-bottom: var(--spacing-xl); }
+
+        /* ===== RESPONSIVE DESIGN ===== */
+        @media (max-width: 768px) {
+            .app-container {
+                padding: var(--spacing-sm);
+            }
+
+            h1 {
+                font-size: var(--font-size-xxl);
+            }
+
+            h2 {
+                font-size: var(--font-size-xl);
+            }
+
+            .fab {
+                bottom: var(--spacing-md);
+                right: var(--spacing-md);
+                width: 56px;
+                height: 56px;
+            }
+
+            .decision-buttons {
+                flex-direction: column;
+            }
+
+            .decision-buttons .btn {
+                width: 100%;
+            }
+
+            .modal-content {
+                padding: var(--spacing-md);
+                width: 95%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header {
+                flex-direction: column;
+                gap: var(--spacing-md);
+                align-items: flex-start;
+            }
+
+            .theme-selector {
+                align-self: flex-start;
+            }
+
+            .toolbar {
+                flex-direction: column;
+            }
+
+            .preset-buttons {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <span>⏸️</span>
+                <h1>Pause</h1>
+            </div>
+            <div class="toolbar">
+                <button class="btn btn-tertiary" id="settingsBtn">Settings</button>
+                <button class="btn btn-tertiary" id="guideBtn">Guide</button>
+                <div class="theme-selector" id="themeSelector">
+                    <!-- Themes will be injected by JavaScript -->
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Left Column: Main App -->
+            <div class="section">
+                <!-- Capture View -->
+                <div id="captureView">
+                    <div class="section-title">
+                        <h2>What's on your mind?</h2>
+                        <span class="badge" id="sentimentBadge">Neutral</span>
+                    </div>
+                    
+                    <textarea 
+                        class="textarea" 
+                        id="messageInput" 
+                        placeholder="Type your impulsive message, purchase note, or emotional response here..."
+                        rows="8"
+                    ></textarea>
+
+                    <div class="sentiment-indicator mt-3" id="recommendedDelay">
+                        <span>💡 Recommended delay: <strong>10 minutes</strong></span>
+                    </div>
+
+                    <div class="delay-display mt-4">
+                        <div class="text-overline mb-1">Delay Duration</div>
+                        <div class="text-center">
+                            <span id="delayDisplay">10 minutes</span>
+                        </div>
+                    </div>
+
+                    <input 
+                        type="range" 
+                        class="slider" 
+                        id="delaySlider" 
+                        min="1" 
+                        max="1440" 
+                        value="10"
+                    >
+
+                    <div class="preset-buttons mt-3">
+                        <button class="btn btn-secondary" data-minutes="10">Cool Off (10 min)</button>
+                        <button class="btn btn-secondary" data-minutes="60">Think Twice (1 hr)</button>
+                        <button class="btn btn-secondary" data-minutes="720">Sleep On It (12 hr)</button>
+                        <button class="btn btn-secondary" data-minutes="1440">Full Day (24 hr)</button>
+                    </div>
+                </div>
+
+                <!-- Waiting View -->
+                <div id="waitingView" class="hidden">
+                    <div class="section-title">
+                        <h2>Paused & Processing</h2>
+                        <span class="badge pulse">Live</span>
+                    </div>
+
+                    <div class="animation-container" id="animationContainer">
+                        <!-- Particles will be injected by JavaScript -->
+                    </div>
+
+                    <div class="delay-display text-center">
+                        <div class="text-overline mb-1">Time Remaining</div>
+                        <div class="text-center">
+                            <span id="timeRemaining">10:00</span>
+                        </div>
+                        <div class="text-caption mt-2" id="unlockTime">
+                            Unlocks at 14:30
+                        </div>
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <div class="text-body" id="mindfulnessPrompt">
+                            Take a deep breath. The urge will pass.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recovery View -->
+                <div id="recoveryView" class="hidden">
+                    <div class="section-title">
+                        <h2>Ready for Review</h2>
+                        <span class="badge" id="timeAgoBadge">10 minutes ago</span>
+                    </div>
+
+                    <div class="card mb-4">
+                        <div class="text-caption mb-2">Original Message</div>
+                        <div class="text-body" id="reviewText" style="white-space: pre-wrap;"></div>
+                    </div>
+
+                    <div class="text-center mb-4">
+                        <div class="text-body">
+                            How do you feel about this now?
+                        </div>
+                    </div>
+
+                    <div class="decision-buttons">
+                        <button class="btn btn-secondary" id="editBtn">✏️ Edit</button>
+                        <button class="btn btn-tertiary" id="releaseBtn">🗑️ Release & Delete</button>
+                        <button class="btn btn-primary" id="sendBtn">🚀 Send Now</button>
+                    </div>
+
+                    <div class="mt-4">
+                        <select class="select" id="feelingSelect">
+                            <option value="">How are you feeling now?</option>
+                            <option value="angry">😤 Still Fired Up</option>
+                            <option value="neutral">😐 Neutral / Unsure</option>
+                            <option value="relieved">😌 Relieved / Calm</option>
+                            <option value="amused">😄 Amused / Over It</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- FAB -->
+                <button class="fab" id="pauseFab">
+                    ⏸️
+                </button>
+            </div>
+
+            <!-- Right Column: Stats & Tools -->
+            <div class="section">
+                <div class="card">
+                    <h3>Your Stats</h3>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">⏸️</div>
+                        <div class="stat-content">
+                            <div class="stat-value" id="totalPauses">0</div>
+                            <div class="stat-label">Total Pauses</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon">✅</div>
+                        <div class="stat-content">
+                            <div class="stat-value" id="releasedCount">0%</div>
+                            <div class="stat-label">Released vs Sent</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon">⏱️</div>
+                        <div class="stat-content">
+                            <div class="stat-value" id="avgDelay">0 min</div>
+                            <div class="stat-label">Average Delay</div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <button class="btn btn-secondary w-100" id="exportBtn">Export Data</button>
+                        <button class="btn btn-tertiary w-100 mt-2" id="importBtn">Import Data</button>
+                        <button class="btn btn-tertiary w-100 mt-2" id="resetBtn">Reset All Data</button>
+                    </div>
+                </div>
+
+                <div class="card mt-4">
+                    <h3>Quick Tools</h3>
+                    <div class="toolbar">
+                        <button class="btn btn-tertiary" id="quickNoteBtn">Quick Note</button>
+                        <button class="btn btn-tertiary" id="moodCheckBtn">Mood Check</button>
+                        <button class="btn btn-tertiary" id="breathBtn">Breathing Guide</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="text-caption">
+                Made with ❤️ by <a href="https://github.com/Aliriyaj007" target="_blank" style="color: var(--color-primary); text-decoration: none;">Aliriyaj007</a>
+            </div>
+            <div class="text-caption mt-1">
+                Your data never leaves this device. No tracking. No AI. Just mindfulness.
+            </div>
+        </footer>
+    </div>
+
+    <!-- Modals -->
+    <div class="modal" id="settingsModal">
+        <div class="modal-content">
+            <div class="section-title">
+                <h2>Settings</h2>
+                <button class="btn btn-tertiary" id="closeSettings">×</button>
+            </div>
+
+            <div class="tab-container">
+                <button class="tab active" data-tab="general">General</button>
+                <button class="tab" data-tab="appearance">Appearance</button>
+                <button class="tab" data-tab="behavior">Behavior</button>
+                <button class="tab" data-tab="backup">Backup</button>
+            </div>
+
+            <div class="tab-content active" id="generalTab">
+                <div class="setting-item">
+                    <div class="setting-label">
+                        <div class="text-body">Enable Sentiment Analysis</div>
+                        <div class="text-caption">Get delay recommendations based on text</div>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" id="sentimentToggle" checked>
+                        <span class="slider-toggle"></span>
+                    </label>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-label">
+                        <div class="text-body">Mindfulness Prompts</div>
+                        <div class="text-caption">Show calming prompts during waiting period</div>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" id="mindfulnessToggle" checked>
+                        <span class="slider-toggle"></span>
+                    </label>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-label">
+                        <div class="text-body">Haptic Feedback</div>
+                        <div class="text-caption">Vibrate on button presses (mobile only)</div>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" id="hapticToggle" checked>
+                        <span class="slider-toggle"></span>
+                    </label>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-label">
+                        <div class="text-body">Default Delay</div>
+                        <div class="text-caption">Initial delay when app opens (minutes)</div>
+                    </div>
+                    <input type="number" class="select" id="defaultDelay" min="1" max="1440" value="10" style="width: 100px;">
+                </div>
+            </div>
+
+            <div class="tab-content" id="appearanceTab">
+                <div class="setting-item">
+                    <div class="setting-label">
+                        <div class="text-body">Animation Intensity</div>
+                        <div class="text-caption">Particle animation during waiting</div>
+                    </div>
+                    <select class="select" id="animationIntensity" style="width: 120px;">
+                        <option value="low">Low</option>
+                        <option value="medium" selected>Medium</option>
+                        <option value="high">High</option>
+                    </select>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-label">
+                        <div class="text-body">Font Size</div>
+                        <div class="text-caption">Base text size</div>
+                    </div>
+                    <select class="select" id="fontSize" style="width: 120px;">
+                        <option value="small">Small</option>
+                        <option value="medium" selected>Medium</option>
+                        <option value="large">Large</option>
+                        <option value="xlarge">Extra Large</option>
+                    </select>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-label">
+                        <div class="text-body">Compact Mode</div>
+                        <div class="text-caption">Reduce spacing for smaller screens</div>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" id="compactMode">
+                        <span class="slider-toggle"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="tab-content" id="behaviorTab">
+                <div class="setting-item">
+                    <div class="setting-label">
+                        <div class="text-body">Auto-start Timer</div>
+                        <div class="text-caption">Start countdown immediately when locking</div>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" id="autoStartToggle" checked>
+                        <span class="slider-toggle"></span>
+                    </label>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-label">
+                        <div class="text-body">Notification Sound</div>
+                        <div class="text-caption">Play sound when pause is ready</div>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" id="soundToggle" checked>
+                        <span class="slider-toggle"></span>
+                    </label>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-label">
+                        <div class="text-body">Retention Period</div>
+                        <div class="text-caption">Keep completed pauses for (days)</div>
+                    </div>
+                    <select class="select" id="retentionPeriod" style="width: 120px;">
+                        <option value="1">1 Day</option>
+                        <option value="7" selected>7 Days</option>
+                        <option value="30">30 Days</option>
+                        <option value="0">Forever</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="tab-content" id="backupTab">
+                <div class="text-center">
+                    <button class="btn btn-primary" id="exportSettingsBtn">Export All Settings</button>
+                    <button class="btn btn-secondary mt-2" id="importSettingsBtn">Import Settings</button>
+                    <button class="btn btn-tertiary mt-2" id="resetSettingsBtn">Reset to Defaults</button>
+                    
+                    <div class="mt-4">
+                        <div class="text-caption">
+                            Export includes: Settings, Statistics, and Pause History
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="guideModal">
+        <div class="modal-content">
+            <div class="section-title">
+                <h2>User Guide</h2>
+                <button class="btn btn-tertiary" id="closeGuide">×</button>
+            </div>
+
+            <div class="guide-section">
+                <h3>What is Pause?</h3>
+                <p class="text-body">
+                    Pause is a mindfulness tool that creates a buffer between impulse and action. 
+                    It helps you avoid sending angry emails, making impulse purchases, or posting 
+                    things you might regret by introducing a mandatory waiting period.
+                </p>
+            </div>
+
+            <div class="guide-section">
+                <h3>How to Use</h3>
+                
+                <div class="guide-step">
+                    <div class="step-number">1</div>
+                    <div>
+                        <h4>Write Your Impulse</h4>
+                        <p class="text-body">
+                            Type your message, purchase note, or emotional response in the text area. 
+                            The app will analyze sentiment and suggest an appropriate delay.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="guide-step">
+                    <div class="step-number">2</div>
+                    <div>
+                        <h4>Set Delay Duration</h4>
+                        <p class="text-body">
+                            Use the slider or preset buttons to choose how long to pause (10 minutes to 24 hours).
+                            The delay gives your rational brain time to catch up with your emotions.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="guide-step">
+                    <div class="step-number">3</div>
+                    <div>
+                        <h4>Lock & Wait</h4>
+                        <p class="text-body">
+                            Click the ⏸️ button to lock your message. Watch the calming animation 
+                            and use the waiting period to reflect. The app works even if you close it.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="guide-step">
+                    <div class="step-number">4</div>
+                    <div>
+                        <h4>Review & Decide</h4>
+                        <p class="text-body">
+                            When the timer ends, review your message with fresh eyes. Choose to send, 
+                            edit, or delete it. Track your decisions in the stats panel.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="guide-section">
+                <h3>Features & Tips</h3>
+                
+                <div class="setting-item">
+                    <div class="setting-label">
+                        <div class="text-body">📊 Statistics</div>
+                        <div class="text-caption">Track your pausing habits and decision patterns</div>
+                    </div>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-label">
+                        <div class="text-body">🎨 Themes</div>
+                        <div class="text-caption">Choose from 7 carefully designed color themes</div>
+                    </div>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-label">
+                        <div class="text-body">💾 Export/Import</div>
+                        <div class="text-caption">Backup your data or move it to another device</div>
+                    </div>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-label">
+                        <div class="text-body">🔒 Privacy</div>
+                        <div class="text-caption">All data stays on your device. No tracking, no cloud.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="guide-section">
+                <h3>Need Help?</h3>
+                <p class="text-body">
+                    This is a fully client-side application. Your data is stored locally in your browser.
+                    If you clear browser data, you will lose your settings and history. Use the export 
+                    feature to create backups.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <input type="file" id="importFileInput" accept=".json" style="display: none;">
+
+    <script>
+        // ===== MODULE PATTERN: IIFE for encapsulation =====
+        (function() {
+            'use strict';
+
+            // ===== STATE MANAGEMENT MODULE =====
+            const StateManager = (function() {
+                // Private state
+                let state = {
+                    currentView: 'capture',
+                    currentPause: {
+                        id: null,
+                        text: '',
+                        sentiment: 'neutral',
+                        lockTimestamp: null,
+                        unlockTimestamp: null,
+                        duration: 10,
+                        status: 'draft'
+                    },
+                    settings: {
+                        theme: 'light',
+                        sentimentAnalysis: true,
+                        mindfulnessPrompts: true,
+                        hapticFeedback: true,
+                        defaultDelay: 10,
+                        animationIntensity: 'medium',
+                        fontSize: 'medium',
+                        compactMode: false,
+                        autoStart: true,
+                        soundEnabled: true,
+                        retentionPeriod: 7
+                    },
+                    statistics: {
+                        totalPauses: 0,
+                        releasedCount: 0,
+                        sentCount: 0,
+                        totalDelayTime: 0,
+                        history: []
+                    }
+                };
+
+                // Initialize from localStorage
+                function init() {
+                    const savedState = localStorage.getItem('pauseAppState');
+                    const savedStats = localStorage.getItem('pauseAppStats');
+                    
+                    if (savedState) {
+                        const parsed = JSON.parse(savedState);
+                        state.settings = { ...state.settings, ...parsed.settings };
+                        state.currentView = parsed.currentView || 'capture';
+                        state.currentPause = parsed.currentPause || state.currentPause;
+                    }
+                    
+                    if (savedStats) {
+                        state.statistics = JSON.parse(savedStats);
+                    }
+                    
+                    // Check for active pause
+                    checkActivePause();
+                }
+
+                // Check if there's an active pause that needs to be resumed
+                function checkActivePause() {
+                    const activePause = localStorage.getItem('activePause');
+                    if (activePause) {
+                        const pause = JSON.parse(activePause);
+                        const now = Date.now();
+                        const unlockTime = parseInt(pause.unlockTimestamp);
+                        
+                        if (now >= unlockTime) {
+                            // Pause is ready for review
+                            state.currentPause = pause;
+                            state.currentView = 'recovery';
+                            localStorage.removeItem('activePause');
+                        } else {
+                            // Pause is still waiting
+                            state.currentPause = pause;
+                            state.currentView = 'waiting';
+                        }
+                        saveState();
+                    }
+                }
+
+                // Save state to localStorage
+                function saveState() {
+                    localStorage.setItem('pauseAppState', JSON.stringify({
+                        currentView: state.currentView,
+                        currentPause: state.currentPause,
+                        settings: state.settings
+                    }));
+                    
+                    localStorage.setItem('pauseAppStats', JSON.stringify(state.statistics));
+                }
+
+                // Update settings
+                function updateSettings(newSettings) {
+                    state.settings = { ...state.settings, ...newSettings };
+                    saveState();
+                    return state.settings;
+                }
+
+                // Start a new pause
+                function startPause(text, duration, sentiment) {
+                    const id = 'pause_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                    const now = Date.now();
+                    const unlockTime = now + (duration * 60000); // Convert minutes to milliseconds
+                    
+                    state.currentPause = {
+                        id,
+                        text,
+                        sentiment,
+                        lockTimestamp: now,
+                        unlockTimestamp: unlockTime,
+                        duration,
+                        status: 'locked'
+                    };
+                    
+                    state.currentView = 'waiting';
+                    state.statistics.totalPauses++;
+                    state.statistics.totalDelayTime += duration;
+                    
+                    // Save active pause separately for recovery if app is closed
+                    localStorage.setItem('activePause', JSON.stringify(state.currentPause));
+                    saveState();
+                    
+                    return state.currentPause;
+                }
+
+                // Complete a pause
+                function completePause(action, feeling) {
+                    const pause = { ...state.currentPause };
+                    pause.completedAt = Date.now();
+                    pause.action = action;
+                    pause.feeling = feeling;
+                    pause.status = 'completed';
+                    
+                    state.statistics.history.push(pause);
+                    
+                    if (action === 'released') {
+                        state.statistics.releasedCount++;
+                    } else if (action === 'sent') {
+                        state.statistics.sentCount++;
+                    }
+                    
+                    localStorage.removeItem('activePause');
+                    state.currentView = 'capture';
+                    state.currentPause = {
+                        id: null,
+                        text: '',
+                        sentiment: 'neutral',
+                        lockTimestamp: null,
+                        unlockTimestamp: null,
+                        duration: state.settings.defaultDelay,
+                        status: 'draft'
+                    };
+                    
+                    // Clean old history
+                    cleanOldHistory();
+                    saveState();
+                }
+
+                // Clean history older than retention period
+                function cleanOldHistory() {
+                    if (state.settings.retentionPeriod === 0) return;
+                    
+                    const cutoff = Date.now() - (state.settings.retentionPeriod * 24 * 60 * 60 * 1000);
+                    state.statistics.history = state.statistics.history.filter(
+                        pause => pause.completedAt > cutoff
+                    );
+                }
+
+                // Export all data
+                function exportData() {
+                    return {
+                        version: '1.0',
+                        exportedAt: new Date().toISOString(),
+                        settings: state.settings,
+                        statistics: state.statistics,
+                        currentPause: state.currentPause
+                    };
+                }
+
+                // Import data
+                function importData(data) {
+                    if (data.version !== '1.0') {
+                        throw new Error('Invalid data version');
+                    }
+                    
+                    state.settings = data.settings || state.settings;
+                    state.statistics = data.statistics || state.statistics;
+                    saveState();
+                    return true;
+                }
+
+                // Reset to defaults
+                function resetToDefaults() {
+                    state.settings = {
+                        theme: 'light',
+                        sentimentAnalysis: true,
+                        mindfulnessPrompts: true,
+                        hapticFeedback: true,
+                        defaultDelay: 10,
+                        animationIntensity: 'medium',
+                        fontSize: 'medium',
+                        compactMode: false,
+                        autoStart: true,
+                        soundEnabled: true,
+                        retentionPeriod: 7
+                    };
+                    
+                    state.currentView = 'capture';
+                    state.currentPause = {
+                        id: null,
+                        text: '',
+                        sentiment: 'neutral',
+                        lockTimestamp: null,
+                        unlockTimestamp: null,
+                        duration: 10,
+                        status: 'draft'
+                    };
+                    
+                    localStorage.removeItem('activePause');
+                    saveState();
+                }
+
+                // Reset statistics only
+                function resetStatistics() {
+                    state.statistics = {
+                        totalPauses: 0,
+                        releasedCount: 0,
+                        sentCount: 0,
+                        totalDelayTime: 0,
+                        history: []
+                    };
+                    saveState();
+                }
+
+                // Public API
+                return {
+                    init,
+                    getState: () => ({ ...state }),
+                    updateSettings,
+                    startPause,
+                    completePause,
+                    exportData,
+                    importData,
+                    resetToDefaults,
+                    resetStatistics,
+                    saveState
+                };
+            })();
+
+            // ===== UI CONTROLLER MODULE =====
+            const UIController = (function() {
+                // DOM Elements
+                const elements = {
+                    // Views
+                    captureView: document.getElementById('captureView'),
+                    waitingView: document.getElementById('waitingView'),
+                    recoveryView: document.getElementById('recoveryView'),
+                    
+                    // Inputs
+                    messageInput: document.getElementById('messageInput'),
+                    delaySlider: document.getElementById('delaySlider'),
+                    delayDisplay: document.getElementById('delayDisplay'),
+                    sentimentBadge: document.getElementById('sentimentBadge'),
+                    recommendedDelay: document.getElementById('recommendedDelay'),
+                    
+                    // Waiting View
+                    timeRemaining: document.getElementById('timeRemaining'),
+                    unlockTime: document.getElementById('unlockTime'),
+                    mindfulnessPrompt: document.getElementById('mindfulnessPrompt'),
+                    animationContainer: document.getElementById('animationContainer'),
+                    
+                    // Recovery View
+                    reviewText: document.getElementById('reviewText'),
+                    timeAgoBadge: document.getElementById('timeAgoBadge'),
+                    feelingSelect: document.getElementById('feelingSelect'),
+                    
+                    // Buttons
+                    pauseFab: document.getElementById('pauseFab'),
+                    editBtn: document.getElementById('editBtn'),
+                    releaseBtn: document.getElementById('releaseBtn'),
+                    sendBtn: document.getElementById('sendBtn'),
+                    exportBtn: document.getElementById('exportBtn'),
+                    importBtn: document.getElementById('importBtn'),
+                    resetBtn: document.getElementById('resetBtn'),
+                    
+                    // Preset buttons
+                    presetButtons: document.querySelectorAll('.preset-buttons button'),
+                    
+                    // Stats
+                    totalPauses: document.getElementById('totalPauses'),
+                    releasedCount: document.getElementById('releasedCount'),
+                    avgDelay: document.getElementById('avgDelay'),
+                    
+                    // Modals
+                    settingsModal: document.getElementById('settingsModal'),
+                    guideModal: document.getElementById('guideModal'),
+                    settingsBtn: document.getElementById('settingsBtn'),
+                    guideBtn: document.getElementById('guideBtn'),
+                    closeSettings: document.getElementById('closeSettings'),
+                    closeGuide: document.getElementById('closeGuide'),
+                    
+                    // Theme selector
+                    themeSelector: document.getElementById('themeSelector'),
+                    
+                    // Settings inputs
+                    sentimentToggle: document.getElementById('sentimentToggle'),
+                    mindfulnessToggle: document.getElementById('mindfulnessToggle'),
+                    hapticToggle: document.getElementById('hapticToggle'),
+                    defaultDelay: document.getElementById('defaultDelay'),
+                    animationIntensity: document.getElementById('animationIntensity'),
+                    fontSize: document.getElementById('fontSize'),
+                    compactMode: document.getElementById('compactMode'),
+                    autoStartToggle: document.getElementById('autoStartToggle'),
+                    soundToggle: document.getElementById('soundToggle'),
+                    retentionPeriod: document.getElementById('retentionPeriod'),
+                    
+                    // Settings buttons
+                    exportSettingsBtn: document.getElementById('exportSettingsBtn'),
+                    importSettingsBtn: document.getElementById('importSettingsBtn'),
+                    resetSettingsBtn: document.getElementById('resetSettingsBtn'),
+                    
+                    // Tabs
+                    tabs: document.querySelectorAll('.tab'),
+                    tabContents: document.querySelectorAll('.tab-content'),
+                    
+                    // File input
+                    importFileInput: document.getElementById('importFileInput'),
+                    
+                    // Quick tools
+                    quickNoteBtn: document.getElementById('quickNoteBtn'),
+                    moodCheckBtn: document.getElementById('moodCheckBtn'),
+                    breathBtn: document.getElementById('breathBtn')
+                };
+
+                // Animation particles
+                let particles = [];
+                let animationFrame = null;
+
+                // Initialize UI
+                function init() {
+                    const state = StateManager.getState();
+                    
+                    // Set initial view
+                    showView(state.currentView);
+                    
+                    // Setup event listeners
+                    setupEventListeners();
+                    
+                    // Initialize theme selector
+                    initThemeSelector();
+                    
+                    // Initialize settings form
+                    initSettingsForm();
+                    
+                    // Update statistics display
+                    updateStatistics();
+                    
+                    // Start animation loop if in waiting view
+                    if (state.currentView === 'waiting') {
+                        startWaitingAnimation();
+                        startCountdown();
+                    }
+                    
+                    // Apply current theme
+                    ThemeManager.applyTheme(state.settings.theme);
+                }
+
+                // Show specific view
+                function showView(viewName) {
+                    elements.captureView.classList.add('hidden');
+                    elements.waitingView.classList.add('hidden');
+                    elements.recoveryView.classList.add('hidden');
+                    
+                    switch(viewName) {
+                        case 'capture':
+                            elements.captureView.classList.remove('hidden');
+                            elements.pauseFab.classList.remove('hidden');
+                            break;
+                        case 'waiting':
+                            elements.waitingView.classList.remove('hidden');
+                            elements.pauseFab.classList.add('hidden');
+                            startWaitingAnimation();
+                            startCountdown();
+                            break;
+                        case 'recovery':
+                            elements.recoveryView.classList.remove('hidden');
+                            elements.pauseFab.classList.add('hidden');
+                            setupRecoveryView();
+                            break;
+                    }
+                }
+
+                // Setup recovery view with data
+                function setupRecoveryView() {
+                    const state = StateManager.getState();
+                    const pause = state.currentPause;
+                    
+                    elements.reviewText.textContent = pause.text;
+                    
+                    // Calculate time ago
+                    const now = Date.now();
+                    const lockTime = parseInt(pause.lockTimestamp);
+                    const minutesAgo = Math.floor((now - lockTime) / 60000);
+                    
+                    let timeAgoText;
+                    if (minutesAgo < 60) {
+                        timeAgoText = `${minutesAgo} minute${minutesAgo === 1 ? '' : 's'} ago`;
+                    } else if (minutesAgo < 1440) {
+                        const hours = Math.floor(minutesAgo / 60);
+                        timeAgoText = `${hours} hour${hours === 1 ? '' : 's'} ago`;
+                    } else {
+                        const days = Math.floor(minutesAgo / 1440);
+                        timeAgoText = `${days} day${days === 1 ? '' : 's'} ago`;
+                    }
+                    
+                    elements.timeAgoBadge.textContent = timeAgoText;
+                    
+                    // Reset feeling select
+                    elements.feelingSelect.value = '';
+                }
+
+                // Start waiting animation
+                function startWaitingAnimation() {
+                    const state = StateManager.getState();
+                    const intensity = state.settings.animationIntensity;
+                    
+                    // Clear existing particles
+                    particles = [];
+                    elements.animationContainer.innerHTML = '';
+                    
+                    // Create particles based on intensity
+                    let particleCount;
+                    switch(intensity) {
+                        case 'low': particleCount = 15; break;
+                        case 'high': particleCount = 60; break;
+                        default: particleCount = 30; break;
+                    }
+                    
+                    for (let i = 0; i < particleCount; i++) {
+                        createParticle();
+                    }
+                    
+                    // Start animation loop
+                    if (animationFrame) {
+                        cancelAnimationFrame(animationFrame);
+                    }
+                    animateParticles();
+                }
+
+                // Create a single particle
+                function createParticle() {
+                    const container = elements.animationContainer;
+                    const size = Math.random() * 20 + 5;
+                    
+                    const particle = document.createElement('div');
+                    particle.className = 'particle';
+                    particle.style.width = `${size}px`;
+                    particle.style.height = `${size}px`;
+                    particle.style.left = `${Math.random() * 100}%`;
+                    particle.style.top = `${Math.random() * 100}%`;
+                    particle.style.background = getComputedStyle(document.documentElement)
+                        .getPropertyValue('--gradient-primary');
+                    particle.style.opacity = Math.random() * 0.4 + 0.2;
+                    
+                    container.appendChild(particle);
+                    
+                    particles.push({
+                        element: particle,
+                        x: Math.random() * 100,
+                        y: Math.random() * 100,
+                        speedX: (Math.random() - 0.5) * 0.5,
+                        speedY: (Math.random() - 0.5) * 0.5,
+                        size: size
+                    });
+                }
+
+                // Animate particles
+                function animateParticles() {
+                    const container = elements.animationContainer;
+                    const width = container.clientWidth;
+                    const height = container.clientHeight;
+                    
+                    particles.forEach(particle => {
+                        // Update position
+                        particle.x += particle.speedX;
+                        particle.y += particle.speedY;
+                        
+                        // Bounce off walls
+                        if (particle.x < 0 || particle.x > 100) particle.speedX *= -1;
+                        if (particle.y < 0 || particle.y > 100) particle.speedY *= -1;
+                        
+                        // Keep within bounds
+                        particle.x = Math.max(0, Math.min(100, particle.x));
+                        particle.y = Math.max(0, Math.min(100, particle.y));
+                        
+                        // Update DOM
+                        particle.element.style.left = `${particle.x}%`;
+                        particle.element.style.top = `${particle.y}%`;
+                        
+                        // Pulsing effect
+                        const pulse = Math.sin(Date.now() / 1000 + particle.x) * 0.1 + 0.9;
+                        particle.element.style.transform = `scale(${pulse})`;
+                    });
+                    
+                    animationFrame = requestAnimationFrame(animateParticles);
+                }
+
+                // Start countdown timer
+                function startCountdown() {
+                    const state = StateManager.getState();
+                    const pause = state.currentPause;
+                    const unlockTime = parseInt(pause.unlockTimestamp);
+                    
+                    function updateTimer() {
+                        const now = Date.now();
+                        const remaining = unlockTime - now;
+                        
+                        if (remaining <= 0) {
+                            // Timer complete
+                            elements.timeRemaining.textContent = 'Ready!';
+                            elements.unlockTime.textContent = 'Time to review your message';
+                            
+                            // Switch to recovery view
+                            StateManager.getState().currentView = 'recovery';
+                            StateManager.saveState();
+                            showView('recovery');
+                            
+                            // Play sound if enabled
+                            if (state.settings.soundEnabled) {
+                                playNotificationSound();
+                            }
+                            
+                            return;
+                        }
+                        
+                        // Calculate remaining time
+                        const minutes = Math.floor(remaining / 60000);
+                        const seconds = Math.floor((remaining % 60000) / 1000);
+                        
+                        elements.timeRemaining.textContent = 
+                            `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                        
+                        // Update unlock time display
+                        const unlockDate = new Date(unlockTime);
+                        elements.unlockTime.textContent = 
+                            `Unlocks at ${unlockDate.getHours().toString().padStart(2, '0')}:${unlockDate.getMinutes().toString().padStart(2, '0')}`;
+                        
+                        // Update mindfulness prompt periodically
+                        if (Math.random() < 0.01) { // 1% chance each frame
+                            updateMindfulnessPrompt();
+                        }
+                        
+                        // Continue countdown
+                        requestAnimationFrame(updateTimer);
+                    }
+                    
+                    updateTimer();
+                }
+
+                // Update mindfulness prompt
+                function updateMindfulnessPrompt() {
+                    const prompts = [
+                        "Take a deep breath. The urge will pass.",
+                        "Emotions are temporary. Decisions can be permanent.",
+                        "What would your future self thank you for?",
+                        "This moment of pause is a gift to yourself.",
+                        "Notice your breathing. In... and out...",
+                        "The space between impulse and action is where choice lives.",
+                        "You're creating space for clarity to emerge.",
+                        "Feelings are valid. Actions are choices.",
+                        "This delay is an act of self-care.",
+                        "What's one other perspective you could consider?"
+                    ];
+                    
+                    const randomPrompt = prompts[Math.floor(Math.random() * prompts.length)];
+                    elements.mindfulnessPrompt.textContent = randomPrompt;
+                }
+
+                // Analyze sentiment of text
+                function analyzeSentiment(text) {
+                    if (!text.trim()) return 'neutral';
+                    
+                    const angryWords = ['angry', 'mad', 'furious', 'hate', 'stupid', 'idiot', 'rage', 'annoyed', 'frustrated', 'upset'];
+                    const sadWords = ['sad', 'depressed', 'lonely', 'hurt', 'cry', 'tears', 'miss', 'lost', 'grief'];
+                    const excitedWords = ['excited', 'happy', 'great', 'love', 'awesome', 'amazing', 'buy now', 'purchase', 'deal', 'sale'];
+                    
+                    const words = text.toLowerCase().split(/\s+/);
+                    
+                    let angryCount = 0;
+                    let sadCount = 0;
+                    let excitedCount = 0;
+                    
+                    words.forEach(word => {
+                        if (angryWords.some(aw => word.includes(aw))) angryCount++;
+                        if (sadWords.some(sw => word.includes(sw))) sadCount++;
+                        if (excitedWords.some(ew => word.includes(ew))) excitedCount++;
+                    });
+                    
+                    if (angryCount > sadCount && angryCount > excitedCount) return 'angry';
+                    if (sadCount > angryCount && sadCount > excitedCount) return 'sad';
+                    if (excitedCount > angryCount && excitedCount > sadCount) return 'excited';
+                    return 'neutral';
+                }
+
+                // Get recommended delay based on sentiment
+                function getRecommendedDelay(sentiment) {
+                    switch(sentiment) {
+                        case 'angry': return 30; // 30 minutes
+                        case 'sad': return 60;   // 1 hour
+                        case 'excited': return 20; // 20 minutes
+                        default: return 10;      // 10 minutes
+                    }
+                }
+
+                // Update sentiment display
+                function updateSentimentDisplay(text) {
+                    const state = StateManager.getState();
+                    if (!state.settings.sentimentAnalysis) {
+                        elements.sentimentBadge.classList.add('hidden');
+                        elements.recommendedDelay.classList.add('hidden');
+                        return;
+                    }
+                    
+                    const sentiment = analyzeSentiment(text);
+                    const recommendedDelay = getRecommendedDelay(sentiment);
+                    
+                    // Update sentiment badge
+                    elements.sentimentBadge.textContent = 
+                        sentiment.charAt(0).toUpperCase() + sentiment.slice(1);
+                    elements.sentimentBadge.classList.remove('hidden');
+                    
+                    // Update recommended delay
+                    elements.recommendedDelay.innerHTML = 
+                        `💡 Recommended delay: <strong>${recommendedDelay} minutes</strong>`;
+                    elements.recommendedDelay.classList.remove('hidden');
+                    
+                    // Update slider if text is long enough
+                    if (text.length > 20) {
+                        elements.delaySlider.value = recommendedDelay;
+                        updateDelayDisplay(recommendedDelay);
+                    }
+                }
+
+                // Update delay display
+                function updateDelayDisplay(minutes) {
+                    let displayText;
+                    if (minutes < 60) {
+                        displayText = `${minutes} minute${minutes === 1 ? '' : 's'}`;
+                    } else if (minutes < 1440) {
+                        const hours = (minutes / 60).toFixed(1);
+                        displayText = `${hours} hour${hours === '1' ? '' : 's'}`;
+                    } else {
+                        const days = (minutes / 1440).toFixed(1);
+                        displayText = `${days} day${days === '1' ? '' : 's'}`;
+                    }
+                    
+                    elements.delayDisplay.textContent = displayText;
+                }
+
+                // Update statistics display
+                function updateStatistics() {
+                    const state = StateManager.getState();
+                    const stats = state.statistics;
+                    
+                    elements.totalPauses.textContent = stats.totalPauses;
+                    
+                    const totalDecisions = stats.releasedCount + stats.sentCount;
+                    const releasedPercent = totalDecisions > 0 ? 
+                        Math.round((stats.releasedCount / totalDecisions) * 100) : 0;
+                    elements.releasedCount.textContent = `${releasedPercent}% released`;
+                    
+                    const avgDelay = stats.totalPauses > 0 ? 
+                        Math.round(stats.totalDelayTime / stats.totalPauses) : 0;
+                    elements.avgDelay.textContent = `${avgDelay} min`;
+                }
+
+                // Play notification sound
+                function playNotificationSound() {
+                    // Create a pleasant notification sound using Web Audio API
+                    try {
+                        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                        const oscillator = audioContext.createOscillator();
+                        const gainNode = audioContext.createGain();
+                        
+                        oscillator.connect(gainNode);
+                        gainNode.connect(audioContext.destination);
+                        
+                        oscillator.frequency.setValueAtTime(440, audioContext.currentTime);
+                        oscillator.frequency.setValueAtTime(523.25, audioContext.currentTime + 0.1);
+                        oscillator.frequency.setValueAtTime(659.25, audioContext.currentTime + 0.2);
+                        
+                        gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+                        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+                        
+                        oscillator.start();
+                        oscillator.stop(audioContext.currentTime + 0.5);
+                    } catch (e) {
+                        // Fallback to simple beep if Web Audio API fails
+                        console.log('🔔 Pause complete!');
+                    }
+                }
+
+                // Vibrate on mobile (if enabled and supported)
+                function vibrate() {
+                    const state = StateManager.getState();
+                    if (state.settings.hapticFeedback && 'vibrate' in navigator) {
+                        navigator.vibrate(50);
+                    }
+                }
+
+                // Initialize theme selector
+                function initThemeSelector() {
+                    const themes = [
+                        { id: 'light', name: 'Light', color: '#f8f9fa' },
+                        { id: 'dark', name: 'Dark', color: '#202124' },
+                        { id: 'midnight-blue', name: 'Midnight', color: '#0f1a2a' },
+                        { id: 'emerald-green', name: 'Emerald', color: '#10b981' },
+                        { id: 'sunset-gradient', name: 'Sunset', color: '#f59e0b' },
+                        { id: 'minimal-gray', name: 'Minimal', color: '#6b7280' },
+                        { id: 'custom-accent', name: 'Violet', color: '#8b5cf6' },
+                        { id: 'oled-dark', name: 'OLED', color: '#000000' }
+                    ];
+                    
+                    elements.themeSelector.innerHTML = '';
+                    
+                    themes.forEach(theme => {
+                        const colorDiv = document.createElement('div');
+                        colorDiv.className = 'theme-color';
+                        colorDiv.style.background = theme.color;
+                        colorDiv.title = theme.name;
+                        colorDiv.dataset.theme = theme.id;
+                        
+                        colorDiv.addEventListener('click', () => {
+                            ThemeManager.applyTheme(theme.id);
+                        });
+                        
+                        elements.themeSelector.appendChild(colorDiv);
+                    });
+                }
+
+                // Initialize settings form
+                function initSettingsForm() {
+                    const state = StateManager.getState();
+                    const settings = state.settings;
+                    
+                    // Set initial values
+                    elements.sentimentToggle.checked = settings.sentimentAnalysis;
+                    elements.mindfulnessToggle.checked = settings.mindfulnessPrompts;
+                    elements.hapticToggle.checked = settings.hapticFeedback;
+                    elements.defaultDelay.value = settings.defaultDelay;
+                    elements.animationIntensity.value = settings.animationIntensity;
+                    elements.fontSize.value = settings.fontSize;
+                    elements.compactMode.checked = settings.compactMode;
+                    elements.autoStartToggle.checked = settings.autoStart;
+                    elements.soundToggle.checked = settings.soundEnabled;
+                    elements.retentionPeriod.value = settings.retentionPeriod;
+                    
+                    // Apply font size
+                    applyFontSize(settings.fontSize);
+                    
+                    // Apply compact mode
+                    applyCompactMode(settings.compactMode);
+                }
+
+                // Apply font size setting
+                function applyFontSize(size) {
+                    const sizes = {
+                        'small': '14px',
+                        'medium': '16px',
+                        'large': '18px',
+                        'xlarge': '20px'
+                    };
+                    
+                    document.documentElement.style.setProperty('--font-size-base', sizes[size] || '16px');
+                }
+
+                // Apply compact mode
+                function applyCompactMode(compact) {
+                    if (compact) {
+                        document.documentElement.style.setProperty('--spacing-xs', '2px');
+                        document.documentElement.style.setProperty('--spacing-sm', '4px');
+                        document.documentElement.style.setProperty('--spacing-md', '8px');
+                        document.documentElement.style.setProperty('--spacing-lg', '12px');
+                        document.documentElement.style.setProperty('--spacing-xl', '16px');
+                    } else {
+                        document.documentElement.style.setProperty('--spacing-xs', '4px');
+                        document.documentElement.style.setProperty('--spacing-sm', '8px');
+                        document.documentElement.style.setProperty('--spacing-md', '16px');
+                        document.documentElement.style.setProperty('--spacing-lg', '24px');
+                        document.documentElement.style.setProperty('--spacing-xl', '32px');
+                    }
+                }
+
+                // Setup event listeners
+                function setupEventListeners() {
+                    // Message input
+                    elements.messageInput.addEventListener('input', (e) => {
+                        updateSentimentDisplay(e.target.value);
+                    });
+                    
+                    // Delay slider
+                    elements.delaySlider.addEventListener('input', (e) => {
+                        updateDelayDisplay(parseInt(e.target.value));
+                    });
+                    
+                    // Preset buttons
+                    elements.presetButtons.forEach(button => {
+                        button.addEventListener('click', (e) => {
+                            const minutes = parseInt(e.target.dataset.minutes);
+                            elements.delaySlider.value = minutes;
+                            updateDelayDisplay(minutes);
+                            vibrate();
+                        });
+                    });
+                    
+                    // Pause FAB
+                    elements.pauseFab.addEventListener('click', () => {
+                        const text = elements.messageInput.value.trim();
+                        if (!text) {
+                            alert('Please enter a message to pause.');
+                            return;
+                        }
+                        
+                        const duration = parseInt(elements.delaySlider.value);
+                        const sentiment = analyzeSentiment(text);
+                        
+                        StateManager.startPause(text, duration, sentiment);
+                        showView('waiting');
+                        vibrate();
+                        
+                        // Clear input
+                        elements.messageInput.value = '';
+                    });
+                    
+                    // Recovery buttons
+                    elements.editBtn.addEventListener('click', () => {
+                        const state = StateManager.getState();
+                        elements.messageInput.value = state.currentPause.text;
+                        elements.delaySlider.value = state.currentPause.duration;
+                        updateDelayDisplay(state.currentPause.duration);
+                        showView('capture');
+                        vibrate();
+                    });
+                    
+                    elements.releaseBtn.addEventListener('click', () => {
+                        const feeling = elements.feelingSelect.value;
+                        StateManager.completePause('released', feeling);
+                        showView('capture');
+                        updateStatistics();
+                        vibrate();
+                        alert('Message released and deleted. The urge has passed.');
+                    });
+                    
+                    elements.sendBtn.addEventListener('click', () => {
+                        const feeling = elements.feelingSelect.value;
+                        StateManager.completePause('sent', feeling);
+                        showView('capture');
+                        updateStatistics();
+                        vibrate();
+                        alert('Message sent. You made a conscious decision.');
+                    });
+                    
+                    // Settings button
+                    elements.settingsBtn.addEventListener('click', () => {
+                        elements.settingsModal.style.display = 'flex';
+                    });
+                    
+                    elements.closeSettings.addEventListener('click', () => {
+                        elements.settingsModal.style.display = 'none';
+                    });
+                    
+                    // Guide button
+                    elements.guideBtn.addEventListener('click', () => {
+                        elements.guideModal.style.display = 'flex';
+                    });
+                    
+                    elements.closeGuide.addEventListener('click', () => {
+                        elements.guideModal.style.display = 'none';
+                    });
+                    
+                    // Close modals on outside click
+                    window.addEventListener('click', (e) => {
+                        if (e.target === elements.settingsModal) {
+                            elements.settingsModal.style.display = 'none';
+                        }
+                        if (e.target === elements.guideModal) {
+                            elements.guideModal.style.display = 'none';
+                        }
+                    });
+                    
+                    // Settings form changes
+                    elements.sentimentToggle.addEventListener('change', (e) => {
+                        StateManager.updateSettings({ sentimentAnalysis: e.target.checked });
+                        updateSentimentDisplay(elements.messageInput.value);
+                    });
+                    
+                    elements.mindfulnessToggle.addEventListener('change', (e) => {
+                        StateManager.updateSettings({ mindfulnessPrompts: e.target.checked });
+                    });
+                    
+                    elements.hapticToggle.addEventListener('change', (e) => {
+                        StateManager.updateSettings({ hapticFeedback: e.target.checked });
+                    });
+                    
+                    elements.defaultDelay.addEventListener('change', (e) => {
+                        const value = parseInt(e.target.value);
+                        if (value >= 1 && value <= 1440) {
+                            StateManager.updateSettings({ defaultDelay: value });
+                            elements.delaySlider.value = value;
+                            updateDelayDisplay(value);
+                        }
+                    });
+                    
+                    elements.animationIntensity.addEventListener('change', (e) => {
+                        StateManager.updateSettings({ animationIntensity: e.target.value });
+                        if (StateManager.getState().currentView === 'waiting') {
+                            startWaitingAnimation();
+                        }
+                    });
+                    
+                    elements.fontSize.addEventListener('change', (e) => {
+                        StateManager.updateSettings({ fontSize: e.target.value });
+                        applyFontSize(e.target.value);
+                    });
+                    
+                    elements.compactMode.addEventListener('change', (e) => {
+                        StateManager.updateSettings({ compactMode: e.target.checked });
+                        applyCompactMode(e.target.checked);
+                    });
+                    
+                    elements.autoStartToggle.addEventListener('change', (e) => {
+                        StateManager.updateSettings({ autoStart: e.target.checked });
+                    });
+                    
+                    elements.soundToggle.addEventListener('change', (e) => {
+                        StateManager.updateSettings({ soundEnabled: e.target.checked });
+                    });
+                    
+                    elements.retentionPeriod.addEventListener('change', (e) => {
+                        StateManager.updateSettings({ retentionPeriod: parseInt(e.target.value) });
+                    });
+                    
+                    // Tabs
+                    elements.tabs.forEach(tab => {
+                        tab.addEventListener('click', () => {
+                            const tabId = tab.dataset.tab;
+                            
+                            // Update active tab
+                            elements.tabs.forEach(t => t.classList.remove('active'));
+                            tab.classList.add('active');
+                            
+                            // Show corresponding content
+                            elements.tabContents.forEach(content => {
+                                content.classList.remove('active');
+                            });
+                            document.getElementById(tabId + 'Tab').classList.add('active');
+                        });
+                    });
+                    
+                    // Export/Import buttons
+                    elements.exportBtn.addEventListener('click', exportData);
+                    elements.importBtn.addEventListener('click', () => {
+                        elements.importFileInput.click();
+                    });
+                    
+                    elements.exportSettingsBtn.addEventListener('click', exportData);
+                    elements.importSettingsBtn.addEventListener('click', () => {
+                        elements.importFileInput.click();
+                    });
+                    
+                    elements.resetBtn.addEventListener('click', () => {
+                        if (confirm('Reset all data including statistics and history?')) {
+                            StateManager.resetStatistics();
+                            updateStatistics();
+                        }
+                    });
+                    
+                    elements.resetSettingsBtn.addEventListener('click', () => {
+                        if (confirm('Reset all settings to defaults?')) {
+                            StateManager.resetToDefaults();
+                            initSettingsForm();
+                            ThemeManager.applyTheme('light');
+                        }
+                    });
+                    
+                    // File import
+                    elements.importFileInput.addEventListener('change', (e) => {
+                        const file = e.target.files[0];
+                        if (!file) return;
+                        
+                        const reader = new FileReader();
+                        reader.onload = (event) => {
+                            try {
+                                const data = JSON.parse(event.target.result);
+                                StateManager.importData(data);
+                                initSettingsForm();
+                                updateStatistics();
+                                ThemeManager.applyTheme(data.settings.theme);
+                                alert('Data imported successfully!');
+                            } catch (error) {
+                                alert('Error importing data: ' + error.message);
+                            }
+                        };
+                        reader.readAsText(file);
+                        
+                        // Reset file input
+                        e.target.value = '';
+                    });
+                    
+                    // Quick tools
+                    elements.quickNoteBtn.addEventListener('click', () => {
+                        elements.messageInput.value = 'Quick note: ' + new Date().toLocaleTimeString();
+                        elements.messageInput.focus();
+                        vibrate();
+                    });
+                    
+                    elements.moodCheckBtn.addEventListener('click', () => {
+                        const moods = ['😊 Calm', '😤 Frustrated', '😔 Tired', '😄 Excited', '😐 Neutral'];
+                        const mood = moods[Math.floor(Math.random() * moods.length)];
+                        elements.messageInput.value = `Mood check: ${mood} at ${new Date().toLocaleTimeString()}`;
+                        elements.messageInput.focus();
+                        vibrate();
+                    });
+                    
+                    elements.breathBtn.addEventListener('click', () => {
+                        const breathGuide = `Breathing exercise:
+                        
+1. Inhale slowly for 4 seconds...
+2. Hold for 4 seconds...
+3. Exhale slowly for 6 seconds...
+4. Repeat 5 times.
+                        
+Feel your body relax with each breath.`;
+                        
+                        elements.messageInput.value = breathGuide;
+                        elements.delaySlider.value = 5; // 5 minutes for breathing
+                        updateDelayDisplay(5);
+                        vibrate();
+                    });
+                }
+
+                // Export data function
+                function exportData() {
+                    const data = StateManager.exportData();
+                    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+                    const url = URL.createObjectURL(blob);
+                    
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `pause-backup-${new Date().toISOString().split('T')[0]}.json`;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                    
+                    vibrate();
+                }
+
+                // Public API
+                return {
+                    init,
+                    showView,
+                    updateStatistics
+                };
+            })();
+
+            // ===== THEME MANAGER MODULE =====
+            const ThemeManager = (function() {
+                const themes = ['light', 'dark', 'midnight-blue', 'emerald-green', 'sunset-gradient', 'minimal-gray', 'custom-accent', 'oled-dark'];
+                let currentTheme = 'light';
+
+                // Apply theme
+                function applyTheme(themeName) {
+                    if (!themes.includes(themeName)) {
+                        themeName = 'light';
+                    }
+                    
+                    // Remove all theme classes
+                    themes.forEach(theme => {
+                        document.body.classList.remove('theme-' + theme);
+                    });
+                    
+                    // Add new theme class
+                    document.body.classList.add('theme-' + themeName);
+                    currentTheme = themeName;
+                    
+                    // Update active theme indicator
+                    document.querySelectorAll('.theme-color').forEach(color => {
+                        color.classList.toggle('active', color.dataset.theme === themeName);
+                    });
+                    
+                    // Save to state
+                    StateManager.updateSettings({ theme: themeName });
+                    
+                    // Update FAB gradient
+                    updateFABGradient();
+                }
+
+                // Update FAB gradient based on theme
+                function updateFABGradient() {
+                    const fab = document.getElementById('pauseFab');
+                    if (fab) {
+                        // Trigger reflow to update gradient
+                        fab.style.background = getComputedStyle(document.documentElement)
+                            .getPropertyValue('--gradient-primary');
+                    }
+                }
+
+                // Get current theme
+                function getCurrentTheme() {
+                    return currentTheme;
+                }
+
+                // Public API
+                return {
+                    applyTheme,
+                    getCurrentTheme
+                };
+            })();
+
+            // ===== UTILITIES MODULE =====
+            const Utilities = (function() {
+                // Format time
+                function formatTime(ms) {
+                    const minutes = Math.floor(ms / 60000);
+                    const seconds = Math.floor((ms % 60000) / 1000);
+                    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                }
+
+                // Format date
+                function formatDate(timestamp) {
+                    const date = new Date(timestamp);
+                    return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                }
+
+                // Debounce function
+                function debounce(func, wait) {
+                    let timeout;
+                    return function executedFunction(...args) {
+                        const later = () => {
+                            clearTimeout(timeout);
+                            func(...args);
+                        };
+                        clearTimeout(timeout);
+                        timeout = setTimeout(later, wait);
+                    };
+                }
+
+                // Generate random ID
+                function generateId() {
+                    return 'id_' + Math.random().toString(36).substr(2, 9);
+                }
+
+                // Validate JSON
+                function isValidJSON(str) {
+                    try {
+                        JSON.parse(str);
+                        return true;
+                    } catch (e) {
+                        return false;
+                    }
+                }
+
+                // Public API
+                return {
+                    formatTime,
+                    formatDate,
+                    debounce,
+                    generateId,
+                    isValidJSON
+                };
+            })();
+
+            // ===== INITIALIZATION =====
+            document.addEventListener('DOMContentLoaded', function() {
+                // Initialize modules
+                StateManager.init();
+                UIController.init();
+                
+                // Set initial delay from settings
+                const state = StateManager.getState();
+                const delaySlider = document.getElementById('delaySlider');
+                const delayDisplay = document.getElementById('delayDisplay');
+                
+                if (delaySlider && delayDisplay) {
+                    delaySlider.value = state.settings.defaultDelay;
+                    UIController.updateDelayDisplay(state.settings.defaultDelay);
+                }
+                
+                // Update sentiment display for any existing text
+                const messageInput = document.getElementById('messageInput');
+                if (messageInput.value) {
+                    UIController.updateSentimentDisplay(messageInput.value);
+                }
+                
+                // Add keyboard shortcuts
+                document.addEventListener('keydown', function(e) {
+                    // Ctrl/Cmd + S to save/pause
+                    if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                        e.preventDefault();
+                        document.getElementById('pauseFab').click();
+                    }
+                    
+                    // Escape to clear
+                    if (e.key === 'Escape') {
+                        if (document.getElementById('settingsModal').style.display === 'flex') {
+                            document.getElementById('closeSettings').click();
+                        } else if (document.getElementById('guideModal').style.display === 'flex') {
+                            document.getElementById('closeGuide').click();
+                        }
+                    }
+                });
+                
+                // Service Worker registration for PWA capabilities
+                if ('serviceWorker' in navigator) {
+                    window.addEventListener('load', () => {
+                        navigator.serviceWorker.register('service-worker.js').catch(error => {
+                            console.log('Service Worker registration failed:', error);
+                        });
+                    });
+                }
+            });
+
+            // ===== GLOBAL ERROR HANDLING =====
+            window.addEventListener('error', function(e) {
+                console.error('Application error:', e.error);
+                // You could add error reporting UI here
+            });
+
+            // ===== PWA INSTALL PROMPT =====
+            let deferredPrompt;
+            window.addEventListener('beforeinstallprompt', (e) => {
+                // Prevent Chrome 67 and earlier from automatically showing the prompt
+                e.preventDefault();
+                // Stash the event so it can be triggered later
+                deferredPrompt = e;
+                
+                // Show install button (you could add this to your UI)
+                setTimeout(() => {
+                    if (confirm('Install Pause as a PWA for offline use?')) {
+                        deferredPrompt.prompt();
+                        deferredPrompt.userChoice.then((choiceResult) => {
+                            if (choiceResult.outcome === 'accepted') {
+                                console.log('User accepted the install prompt');
+                            }
+                            deferredPrompt = null;
+                        });
+                    }
+                }, 10000); // Show after 10 seconds
+            });
+
+            // ===== EXPOSE MODULES FOR DEBUGGING (optional) =====
+            window.PauseApp = {
+                StateManager,
+                UIController,
+                ThemeManager,
+                Utilities
+            };
+
+        })(); // End of IIFE
+    </script>
+</body>
+</html>
